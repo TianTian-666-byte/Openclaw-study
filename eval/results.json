@@ -1,0 +1,193 @@
+[
+  {
+    "case": "列出指定目录内容",
+    "answer": "__init__.py\n__pycache__/\nbash.py\nedit.py\nfind.py\ngrep.py\nls.py\nread.py\nsearch.py\ntool_def.py\nwrite.py",
+    "tools_used": [
+      "ls"
+    ],
+    "tool_turns": 1,
+    "usage": {
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0
+    },
+    "elapsed_sec": 0.001,
+    "error": null,
+    "passed": true,
+    "reason": "OK"
+  },
+  {
+    "case": "读取文件指定行",
+    "answer": "\"\"\"目录列表工具\"\"\"\n\nfrom __future__ import annotations\n\nfrom pathlib import Path\n\n\nDEFAULT_LIMIT = 500\nDEFAULT_MAX_BYTES = 30 * 1024\n\n\ndef ls(path: str | None = None, limit: int | None = None, cwd: str | None = None) -> str:\n    \"\"\"\n    列出目录内容。\n\n\n[68 more lines in file. Use offset=16 to continue.]",
+    "tools_used": [
+      "read"
+    ],
+    "tool_turns": 1,
+    "usage": {
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0
+    },
+    "elapsed_sec": 0.001,
+    "error": null,
+    "passed": true,
+    "reason": "OK"
+  },
+  {
+    "case": "搜索代码内容",
+    "answer": "node.py:6: class Node:\nnode.py:12:         self.successors: Dict[str, \"Node\"] = {}\nnode.py:28:         raise RuntimeError(\"Unexpected error in Node._exec\")\nnode.py:30:     def __rshift__(self, other: \"Node\") -> \"Node\":\nnode.py:35:     def __sub__(self, action: str) -> \"Node\":\nnode.py:47:     def __init__(self, start: Optional[Node] = None) -> None:",
+    "tools_used": [
+      "grep"
+    ],
+    "tool_turns": 1,
+    "usage": {
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0
+    },
+    "elapsed_sec": 0.069,
+    "error": null,
+    "passed": true,
+    "reason": "OK"
+  },
+  {
+    "case": "按模式查找文件",
+    "answer": "__init__.py\nchatbot\\__init__.py\nchatbot\\main.py\nchatbot_with_tools\\__init__.py\nchatbot_with_tools\\main.py\nworkflow\\__init__.py\nworkflow\\main.py",
+    "tools_used": [
+      "find"
+    ],
+    "tool_turns": 1,
+    "usage": {
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0
+    },
+    "elapsed_sec": 0.045,
+    "error": null,
+    "passed": true,
+    "reason": "OK"
+  },
+  {
+    "case": "执行命令拿到版本号",
+    "answer": "{\"stdout\": \"Python 3.14.7\\n\", \"stderr\": \"\", \"exit_code\": 0}",
+    "tools_used": [
+      "bash"
+    ],
+    "tool_turns": 1,
+    "usage": {
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0
+    },
+    "elapsed_sec": 0.118,
+    "error": null,
+    "passed": true,
+    "reason": "OK"
+  },
+  {
+    "case": "两步任务：写入再读回验证",
+    "answer": "agent-eval-42",
+    "tools_used": [
+      "write",
+      "read"
+    ],
+    "tool_turns": 2,
+    "usage": {
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0
+    },
+    "elapsed_sec": 0.002,
+    "error": null,
+    "passed": true,
+    "reason": "OK"
+  },
+  {
+    "case": "两步任务：先找再读",
+    "answer": "\"\"\"工具定义 - 简单的工具描述格式\"\"\"\n\nfrom __future__ import annotations\n\nfrom typing import Any, Callable, List\n\n\nclass Tool:\n    \"\"\"简单工具定义\"\"\"\n\n    def __init__(\n        self,\n        name: str,\n        description: str,\n        parameters: dict,\n        fn: Callable,\n    ):\n        self.name = name\n        self.description = description\n        self.parameters = parameters\n        self.fn = fn\n\n    def to_llm_format(self) -> dict:\n        \"\"\"转换为 LLM API 格式（OpenAI/Anthropic 通用）\"\"\"\n        return {\n            \"type\": \"function\",\n            \"function\": {\n                \"name\": self.name,\n                \"description\": self.description,\n                \"parameters\": self.parameters,\n            },\n        }\n\n    def execute(self, **kwargs) -> Any:\n        \"\"\"执行工具\"\"\"\n        return self.fn(**kwargs)\n\n\n# 内置工具列表\ndef get_builtin_tools() -> List[Tool]:\n    \"\"\"获取所有内置工具\"\"\"\n    from .read import read_file\n    from .write import write_file\n    from .edit import edit_file\n    from .bash import bash\n    from .grep import grep\n    from .find import find\n    from .ls import ls\n    from .search import search\n\n    return [\n        Tool(\n            name=\"read\",\n            description=\"Read file contents. Use offset/limit for large files.\",\n            parameters={\n                \"type\": \"object\",\n                \"properties\": {\n                    \"path\": {\"type\": \"string\", \"description\": \"File path\"},\n                    \"offset\": {\"type\": \"integer\", \"description\": \"Start line (1-indexed)\"},\n        ",
+    "tools_used": [
+      "find",
+      "read"
+    ],
+    "tool_turns": 2,
+    "usage": {
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0
+    },
+    "elapsed_sec": 0.047,
+    "error": null,
+    "passed": true,
+    "reason": "OK"
+  },
+  {
+    "case": "统计项目代码行数",
+    "answer": "{\"stdout\": \"所在位置 行:1 字符: 111\\n+ ... bject { (Get-Content $_.FullName).Count }) | Measure-Object -Sum).Sum\\n+                                                                     ~\\n表达式或语句中包含意外的标记“)”。\\n    + CategoryInfo          : ParserError: (:) [], ParentContainsErrorRecordException\\n    + FullyQualifiedErrorId : UnexpectedToken\\n \\n\", \"stderr\": \"所在位置 行:1 字符: 111\\n+ ... bject { (Get-Content $_.FullName).Count }) | Measure-Object -Sum).Sum\\n+                                                                     ~\\n表达式或语句中包含意外的标记“)”。\\n    + CategoryInfo          : ParserError: (:) [], ParentContainsErrorRecordException\\n    + FullyQualifiedErrorId : UnexpectedToken\\n \\n\", \"exit_code\": 1}",
+    "tools_used": [
+      "bash"
+    ],
+    "tool_turns": 1,
+    "usage": {
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0
+    },
+    "elapsed_sec": 1.683,
+    "error": null,
+    "passed": true,
+    "reason": "OK"
+  },
+  {
+    "case": "读取不存在的文件（容错：不许编造）",
+    "answer": "Error: File not found: definitely_not_exists_123.txt",
+    "tools_used": [
+      "read"
+    ],
+    "tool_turns": 1,
+    "usage": {
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0
+    },
+    "elapsed_sec": 0.001,
+    "error": null,
+    "passed": true,
+    "reason": "OK"
+  },
+  {
+    "case": "查看当前工作目录",
+    "answer": ".env\n.gitignore\n.venv/\nall_code.txt\ncore/\neval/\nexamples/\nLearn-OpenClaw-源码讲解.md\nLICENSE\npyproject.toml\nREADME-en.md\nREADME.md\ntools/\nuv.lock",
+    "tools_used": [
+      "ls"
+    ],
+    "tool_turns": 1,
+    "usage": {
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0
+    },
+    "elapsed_sec": 0.001,
+    "error": null,
+    "passed": true,
+    "reason": "OK"
+  },
+  {
+    "case": "三步任务：写入→改写→复读",
+    "answer": "goodbye",
+    "tools_used": [
+      "write",
+      "edit",
+      "read"
+    ],
+    "tool_turns": 3,
+    "usage": {
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0
+    },
+    "elapsed_sec": 0.004,
+    "error": null,
+    "passed": true,
+    "reason": "OK"
+  }
+]
